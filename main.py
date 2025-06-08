@@ -1,6 +1,7 @@
 import pygame
 import math
 
+# initialize pygame and load some sources
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.mixer.set_num_channels(64)
@@ -15,6 +16,7 @@ font = pygame.font.Font(None, size=30)
 
 sound = pygame.mixer.Sound("paddle_hit.wav")
 
+# setting up some values
 x = 50
 y = 50
 r = 10.0
@@ -45,6 +47,7 @@ while running:
     m_pos = pygame.mouse.get_pos()
     m_pressed = pygame.mouse.get_pressed()
 
+    # check the ball whether it's clicked or not, then do the effects
     if m_ball_collision(x, y, m_pos[0], m_pos[1], r) and m_pressed[0] and pressed_time:
         ball_color = (255, 0, 0)
         pressed_time = False
@@ -58,6 +61,8 @@ while running:
         pressed_time = True
 
     pygame.draw.circle(screen, ball_color, (x, y), r)
+
+    # To pause and unpause the moving ball
     if moving:
         x += x_speed * delta_time
         y += y_speed * delta_time
@@ -65,6 +70,7 @@ while running:
     text = font.render(f"{score}", True, (255, 255, 255))
     screen.blit(text, (10, 10))
 
+    # check the boundaries and the ball collision
     if x < r:
         x = r+1
         x_speed *= -1
@@ -90,6 +96,7 @@ while running:
         r *= 1.05
         sound.play()
 
+    # check for the user inputs
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -108,7 +115,7 @@ while running:
                 else:
                     moving = True
         
-
+    # delta_time and display flip
     delta_time = clock.tick(120) / 1000
     delta_time = max(0.001, min(0.1, delta_time))
     pygame.display.flip()
